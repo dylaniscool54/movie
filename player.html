@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Movies</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      margin: 0;
+      height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    #video {
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 100%;
+      width: 640px;
+      height: 360px;
+      background-color: #000;
+    }
+
+    a {
+      text-decoration: none;
+      color: #007BFF;
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+    
+        iframe {
+      width: 100%;
+      height: 100%;
+      border: none; /* Removes the iframe border */
+    }
+
+  </style>
+</head>
+<body>
+  <h1 id="moviename">
+    Movie Title
+  </h1>
+  <video id="video" controls>
+    Your browser does not support HLS.
+  </video>
+  <br>
+  <a href="/">Back to home</a>
+  <iframe src="/">
+    
+  </iframe>
+  
+  <script src="https://cdn.glitch.global/a062d5ba-a597-4feb-989e-a07c7be0db41/vids.js"></script>
+  <script>
+    async function playvideo(moviename, movieid, moviekey) {
+      document.title = "Watch " + moviename + " Free online"
+      document.getElementById("moviename").textContent = moviename
+      window.fetchchunkprefix = "https://cdn.glitch.global/"+moviekey+"/" + movieid
+      var video = document.getElementById('video');
+      var videoSrc = 'https://cdn.glitch.global/'+moviekey+'/'+movieid+'.m3u8';  // Replace with the correct URL to your .m3u8 file
+
+      if(Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(videoSrc);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          video.play();
+        });
+      }
+      else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = videoSrc;
+        video.addEventListener('loadedmetadata', function() {
+          video.play();
+        });
+      }
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    playvideo(decodeURIComponent(urlParams.get('v')), decodeURIComponent(urlParams.get('id')), decodeURIComponent(urlParams.get('key')))
+  </script>
+</body>
+</html>

@@ -61,22 +61,36 @@
   <div id="movielist">
     <img src="https://cdn.glitch.global/184a66ff-fa51-4ace-99ce-0e56303a65c9/loading%20(1).gif?v=1732948714008" alt="Loading...">
   </div>
-  <script>
-    async function makelist() {
-      const allmovies = await fetch("movs.json");
-      const allmovs = await allmovies.json();
-      const a = document.getElementById("movielist");
-      let h = "";
-      for (let i of allmovs) {
-        let l = `<a class="movie-item" href="/player.html?v=${i["name"]}&id=${i["id"]}&key=${i["key"]}">
+<script>
+  async function makelist() {
+    const allmovies = await fetch("movs.json");
+    const allmovs = await allmovies.json();
+    const a = document.getElementById("movielist");
+    let h = "";
+
+    for (let i of allmovs) {
+      let link = `/player.html?v=${i["name"]}&id=${i["id"]}&key=${i["key"]}`;
+      let l = `<a class="movie-item" href="#" onclick="navigateParent('${link}')">
                   <h2>${i["name"]}</h2>
                   <img src="${i["img"]}" alt="${i["name"]}">
                 </a>`;
-        h += l;
-      }
-      a.innerHTML = h;
+      h += l;
     }
-    makelist();
-  </script>
+    a.innerHTML = h;
+  }
+
+  function navigateParent(url) {
+    if (window.parent !== window) {
+      // If inside an iframe, navigate the parent window
+      window.parent.location.href = url;
+    } else {
+      // If not in an iframe, navigate the current window
+      window.location.href = url;
+    }
+  }
+
+  makelist();
+</script>
+
 </body>
 </html>

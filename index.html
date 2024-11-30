@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Movies</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-top: 20px;
+    }
+    #movielist {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      gap: 20px;
+    }
+    .movie-item {
+      display: block;
+      width: 200px;
+      text-align: center;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      text-decoration: none;
+      color: #333;
+    }
+    .movie-item h2 {
+      font-size: 1.2em;
+      margin: 10px 0;
+      padding: 0 10px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .movie-item img {
+      width: 100%;
+      object-fit: cover;
+      border-bottom: 2px solid #ddd;
+    }
+    .movie-item:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    }
+    #movielist img {
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="movielist">
+    <img src="https://cdn.glitch.global/184a66ff-fa51-4ace-99ce-0e56303a65c9/loading%20(1).gif?v=1732948714008" alt="Loading...">
+  </div>
+  <script>
+    async function makelist() {
+      const allmovies = await fetch("movs.json");
+      const allmovs = await allmovies.json();
+      const a = document.getElementById("movielist");
+      let h = "";
+      for (let i of allmovs) {
+        let l = `<a class="movie-item" href="/watch?v=${i["name"]}&id=${i["id"]}&key=${i["key"]}">
+                  <h2>${i["name"]}</h2>
+                  <img src="${i["img"]}" alt="${i["name"]}">
+                </a>`;
+        h += l;
+      }
+      a.innerHTML = h;
+    }
+    makelist();
+  </script>
+</body>
+</html>

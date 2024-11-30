@@ -10,9 +10,7 @@
       background-color: #f4f4f4;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      padding: 20px;
       margin: 0;
       height: 100vh;
     }
@@ -41,13 +39,46 @@
     a:hover {
       text-decoration: underline;
     }
-    
-        iframe {
-      width: 100%;
-      height: 100%;
-      border: none; /* Removes the iframe border */
+    #movielist {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      gap: 20px;
+      width: 50%;
     }
-
+    .movie-item {
+      display: block;
+      width: 200px;
+      text-align: center;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      text-decoration: none;
+      color: #333;
+    }
+    .movie-item h2 {
+      font-size: 1.2em;
+      margin: 10px 0;
+      padding: 0 10px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .movie-item img {
+      width: 100%;
+      object-fit: cover;
+      border-bottom: 2px solid #ddd;
+    }
+    .movie-item:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    }
+    #movielist img {
+      display: block;
+      margin: 0 auto;
+    }
   </style>
 </head>
 <body>
@@ -59,10 +90,10 @@
   </video>
   <br>
   <a href="/">Back to home</a>
-  <iframe src="/">
-    
-  </iframe>
-  
+    <div id="movielist">
+    <img src="https://cdn.glitch.global/184a66ff-fa51-4ace-99ce-0e56303a65c9/loading%20(1).gif?v=1732948714008" alt="Loading...">
+  </div>
+
   <script src="https://cdn.glitch.global/a062d5ba-a597-4feb-989e-a07c7be0db41/vids.js"></script>
   <script>
     async function playvideo(moviename, movieid, moviekey) {
@@ -90,6 +121,28 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     playvideo(decodeURIComponent(urlParams.get('v')), decodeURIComponent(urlParams.get('id')), decodeURIComponent(urlParams.get('key')))
+    
+    
+    async function makelist() {
+      const response = await fetch("movs.json");
+      const allmovies = await response.json();
+      
+
+      const a = document.getElementById("movielist");
+      let h = "";
+
+      for (let movie of allmovies) {
+        let link = `/player.html?v=${movie["name"]}&id=${movie["id"]}&key=${movie["key"]}`;
+        let l = `<a class="movie-item" href="${link}">
+                      <h2>${movie["name"]}</h2>
+                      <img src="${movie["img"]}" alt="${movie["name"]}">
+                    </a>`;
+        h += l;
+      }
+
+      a.innerHTML = h || `<p style="text-align: center; color: #888;">No movies found</p>`;
+    }
+    makelist()
   </script>
 </body>
 </html>

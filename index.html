@@ -68,7 +68,7 @@
       const a = document.getElementById("movielist");
       let h = "";
       for (let i of allmovs) {
-        let l = `<a class="movie-item" href="/watch?v=${i["name"]}&id=${i["id"]}&key=${i["key"]}">
+        let l = `<a class="movie-item" href="/player.html?v=${i["name"]}&id=${i["id"]}&key=${i["key"]}">
                   <h2>${i["name"]}</h2>
                   <img src="${i["img"]}" alt="${i["name"]}">
                 </a>`;
